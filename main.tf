@@ -4,13 +4,13 @@ terraform {
   ## YOU WILL UNCOMMENT THIS CODE THEN RERUN TERRAFORM INIT
   ## TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
   #############################################################
-   backend "s3" {
-     bucket         = "terraformbucket2unique" # REPLACE WITH YOUR BUCKET NAME
-     key            = "03-basics/import-bootstrap/terraform.tfstate"
-     region         = "eu-west-2"
-     dynamodb_table = "terraform-state-locking"
-     encrypt        = true
-   }
+  # backend "s3" {
+  #   bucket         = "terraformbucket2unique" # REPLACE WITH YOUR BUCKET NAME
+  #   key            = "03-basics/import-bootstrap/terraform.tfstate"
+  #   region         = "eu-west-2"
+  #   dynamodb_table = "terraform-state-locking"
+  #   encrypt        = true
+  # }
 
   required_providers {
     aws = {
@@ -21,11 +21,20 @@ terraform {
 }
 
 provider "aws" {
+  profile = "default"  
   region = "eu-west-2"
+
+  default_tags {
+    tags = {
+        Environment   = "TerraformChap03"
+        Service       = "Test"
+        hashicorp-learn = "aws-default-tags"
+    }
+  }
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "terraformbucket2unique" # REPLACE WITH YOUR BUCKET NAME
+  bucket        = "terraformbucket3unique" # REPLACE WITH YOUR BUCKET NAME
   force_destroy = true
 }
 
